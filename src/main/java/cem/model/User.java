@@ -1,4 +1,6 @@
 package cem.model;
 
-public class User {
-}
+
+import javax.persistence.Entity;
+
+
