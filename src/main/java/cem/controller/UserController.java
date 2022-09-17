@@ -1,15 +1,10 @@
 package cem.controller;
 
-
 import cem.model.User;
 import cem.service.IUserService;
-import cem.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.Iterator;
-import java.util.Set;
 
 @RestController // vi arbejder med Rest
 public class UserController {
@@ -20,9 +15,13 @@ public class UserController {
         this.iUserService = iUserService;
     }
 
-    @GetMapping("/findAll")
-    public ResponseEntity<Set<User>> getUsers() {
-        return new ResponseEntity<>(iUserService.findAll(), HttpStatus.OK);
+    @GetMapping("/fetchAll")
+    public ResponseEntity<String> read() {
+        if (!iUserService.findAll().isEmpty()) {
+            return new ResponseEntity<>("Users: " + iUserService.findAll(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("Schema is empty!", HttpStatus.OK);
+        }
     }
 
     @PostMapping("/createUser")
@@ -32,33 +31,35 @@ public class UserController {
     }
 
 
-    @DeleteMapping("deleteById/{id}")
-    public ResponseEntity<Set<User>> deleteUserById(@PathVariable("id") Long id) {
-        iUserService.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+    @PutMapping("/update")
+    public ResponseEntity<String> update(Long id, @RequestBody User user) {
+        if (iUserService.existsById(id)) {
+            user.setId(id);
+            iUserService.save(user);
+            return new ResponseEntity<>("User updated:", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("User not found:", HttpStatus.OK);
+        }
     }
 
-    @DeleteMapping("/delete") // bruger den ikke
-    public void deleteUser(@RequestBody User user) {
-        iUserService.delete(user);
+    @DeleteMapping("/deleteById")
+    public ResponseEntity<String> delete(@RequestParam Long id) {
+        if (!iUserService.existsById(id)) {
+            return new ResponseEntity<>("User not found:", HttpStatus.OK);
+        } else {
+            iUserService.deleteById(id);
+            return new ResponseEntity<>("User deleted:", HttpStatus.OK);
+        }
     }
 
     @GetMapping("existsById/{id}")
     public boolean exists(@PathVariable("id") Long id) {
         boolean found = false;
-        if (!iUserService.existsById(id)){
+        if (!iUserService.existsById(id)) {
             return found;
         } else {
             return !found;
         }
-
-    }
-
-    @PutMapping("/update")
-    public ResponseEntity<Set<User>> update(Long id, @RequestBody User user) {
-        iUserService.findById(id);
-        iUserService.save(user);
-        return new ResponseEntity<>(HttpStatus.OK);
     }
 
    /* @PutMapping("/update/{id}/{newName}/{newAge}")

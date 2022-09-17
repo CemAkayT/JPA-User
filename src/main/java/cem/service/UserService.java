@@ -1,10 +1,8 @@
 package cem.service;
 
-;
 import cem.model.User;
 import cem.repository.UserRepository;
 import org.springframework.stereotype.Service;
-
 import javax.persistence.EntityNotFoundException;
 import java.util.HashSet;
 import java.util.Optional;
@@ -27,15 +25,13 @@ public class UserService implements IUserService {
 
     @Override
     public Set<User> findAll() {
-        Set<User> userSet = new HashSet<>(); // opretter tomt set
-        userRepository.findAll().forEach(userSet::add); // man skal give den en metode som parameter. For hver User der er i findAll, skal de puttes i userSet. Dobbel kolon betyder man giver metode med
-        return userSet;
+        // opretter tomt set
+        return new HashSet<>(userRepository.findAll());
     }
 
     @Override
     public User save(User user) {
-        userRepository.save(user);
-        return user;
+        return userRepository.save(user);
     }
 
     @Override
@@ -52,8 +48,7 @@ public class UserService implements IUserService {
         userRepository.delete(user);
     }
 
-    @Override
     public boolean existsById(Long aLong) {
-        return userRepository.existsById(aLong);
+      return userRepository.existsById(aLong);
     }
 }
