@@ -52,8 +52,8 @@ public class UserController {
         }
     }
 
-    @GetMapping("existsById/{id}")
-    public boolean exists(@PathVariable("id") Long id) {
+    @GetMapping("/existsById")
+    public boolean exists(@RequestParam Long id) {
         boolean found = false;
         if (!iUserService.existsById(id)) {
             return found;
