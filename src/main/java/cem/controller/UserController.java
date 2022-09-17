@@ -48,7 +48,7 @@ public class UserController {
             return new ResponseEntity<>("User not found:", HttpStatus.OK);
         } else {
             iUserService.deleteById(id);
-            return new ResponseEntity<>("User deleted:", HttpStatus.OK);
+            return new ResponseEntity<>("User deleted...:", HttpStatus.OK);
         }
     }
 
